@@ -1,0 +1,16 @@
+{
+  "location": {
+    "lat": -35.383494,
+    "lng": 36.427362
+  },
+  "accuracy": 50,
+  "name": "Nights watch",
+  "phone_number": "(+91) 983 893 3937",
+  "address": "9, Amari Street, cohen 09",
+  "types": [
+    "shoe park",
+    "shop"
+  ],
+  "website": "http://google.com",
+  "language": "French-IN"
+}
