@@ -4,6 +4,8 @@ import io.restassured.path.json.JsonPath;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import java.io.File;
+
 import static io.restassured.RestAssured.given;
 
 public class JIRA_APIs {
@@ -66,7 +68,71 @@ public class JIRA_APIs {
                 .when().post("/rest/auth/1/session")
                 .then().log().all().assertThat().statusCode(200);
 
-        ///rest/api/2/issue/{issueIdOrKey}/attachments
+        String response = given().log().all().pathParam("id","10100").header("X-Atlassian-Token","no-check").header("Content-Type","multipart/form-data")
+        .filter(sf).multiPart("file",new File("src/main/resources/addPlace.json"))
+        .when().post("/rest/api/2/issue/{id}/attachments")
+        .then().log().all().assertThat().statusCode(200).extract().response().asString();
+
+        JsonPath jPath = new JsonPath(response);
+        String attID = jPath.getString("id");
+
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Attachment ID is : " + attID);
+    }
+
+    @Test
+    public void getIssue()
+    {
+        RestAssured.baseURI = "http://localhost:8080";
+        SessionFilter sf = new SessionFilter();
+
+        given().relaxedHTTPSValidation().log().all().header("Content-Type","application/json")
+                .body("{ \"username\": \"admin\", \"password\": \"admin\" }")
+                .filter(sf)
+                .when().post("/rest/auth/1/session")
+                .then().log().all().assertThat().statusCode(200);
+
+        String issueDetails = given().log().all().pathParam("id","10100").queryParam("fields","comment")
+                .filter(sf)
+                .when().get("/rest/api/2/issue/{id}")
+                .then().log().all().assertThat().statusCode(200).extract().response().asString();
+
+
+    }
+
+    @Test
+    public void createIssue()
+    {
+        RestAssured.baseURI = "http://localhost:8080";
+        SessionFilter sf = new SessionFilter();
+
+        given().log().all().header("Content-Type","application/json")
+        .body("{ \"username\": \"admin\", \"password\": \"admin\" }").filter(sf)
+        .when().post("/rest/auth/1/session")
+        .then().log().all().assertThat().statusCode(200);
+
+        String issueIDResponse =
+                given().log().all().header("Content-Type","application/json").filter(sf)
+                .body("{\n" +
+                        "  \"fields\": {\n" +
+                        "    \"project\":\n" +
+                        "     {\n" +
+                        "      \"key\": \"SKS\"\n" +
+                        "     },\n" +
+                        "      \"summary\": \"Credit Card Defect\",\n" +
+                        "      \"description\": \"Creating issues via Postman\",\n" +
+                        "      \"issuetype\": \n" +
+                        "      {\n" +
+                        "          \"name\": \"Bug\"\n" +
+                        "      }\n" +
+                        "  }\n" +
+                        "}")
+                .when().post("/rest/api/2/issue")
+                .then().log().all().assertThat().statusCode(201).extract().response().asString();
+
+        JsonPath jPath = new JsonPath(issueIDResponse);
+        String issueID = jPath.get("id").toString();
+
+        System.out.println("Created issue is : " + issueID);
 
     }
 }
