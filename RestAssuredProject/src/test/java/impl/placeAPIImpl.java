@@ -15,13 +15,8 @@ import org.testng.Assert;
 import pojo.Location;
 import pojo.addPlaceGoogleMaps;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 import static io.restassured.RestAssured.given;
 
@@ -32,9 +27,9 @@ public class placeAPIImpl {
     Response resp;
     testDataBuild tdb=new testDataBuild();
 
-    public void addPlacePayload() throws FileNotFoundException {
+    public void addPlacePayload() throws Exception {
         PrintStream ps = new PrintStream(new FileOutputStream("log.txt"));
-        RequestSpecification req = new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com").addQueryParam("key", "qaclick123")
+        RequestSpecification req = new RequestSpecBuilder().setBaseUri(getGlobalValue("baseUrl")).addQueryParam("key", "qaclick123")
                 .addFilter(RequestLoggingFilter.logRequestTo(ps))
                 .addFilter(ResponseLoggingFilter.logResponseTo(ps))
                 .setContentType(ContentType.JSON).build();
@@ -59,6 +54,15 @@ public class placeAPIImpl {
     public void verifyStatus(String statusCode)
     {
         Assert.assertEquals(resp.getStatusCode(),200,"Status code did not match");
+    }
+
+    public static String getGlobalValue(String key) throws IOException
+    {
+        Properties prop = new Properties();
+        FileInputStream fis = new FileInputStream("src/test/java/data/global.properties");
+        prop.load(fis);
+        return prop.getProperty(key);
+
     }
 
 }

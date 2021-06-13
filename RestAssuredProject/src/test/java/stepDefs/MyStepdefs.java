@@ -13,7 +13,7 @@ public class MyStepdefs {
     placeAPIImpl obj = new placeAPIImpl();
 
     @Given("^Add place payload$")
-    public void addPlacePayload() throws FileNotFoundException {
+    public void addPlacePayload() throws Exception {
 
         obj.addPlacePayload();
     }

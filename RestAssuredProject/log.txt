@@ -27,7 +27,7 @@ Body:
     "language": "EN"
 }
 HTTP/1.1 200 OK
-Date: Sun, 13 Jun 2021 12:49:35 GMT
+Date: Sun, 13 Jun 2021 14:25:48 GMT
 Server: Apache/2.4.18 (Ubuntu)
 Access-Control-Allow-Origin: *
 Access-Control-Allow-Methods: POST
@@ -40,8 +40,8 @@ Content-Type: application/json;charset=UTF-8
 
 {
     "status": "OK",
-    "place_id": "85ce0326579ac2df7ee989db9fc81a41",
+    "place_id": "2e8004d682ef2218ae295f68fc710b3f",
     "scope": "APP",
-    "reference": "0f683f2347b0956567b77e1ad1e441290f683f2347b0956567b77e1ad1e44129",
-    "id": "0f683f2347b0956567b77e1ad1e44129"
+    "reference": "84a920719fa2baf8e83ddc709738855784a920719fa2baf8e83ddc7097388557",
+    "id": "84a920719fa2baf8e83ddc7097388557"
 }
