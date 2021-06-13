@@ -8,6 +8,16 @@ public class GetCourse {
     private String linkedIn;
     private Courses Courses;
 
+    public String getServices() {
+        return services;
+    }
+
+    public void setServices(String services) {
+        this.services = services;
+    }
+
+    private String services;
+
     public pojo.Courses getCourses() {
         return Courses;
     }

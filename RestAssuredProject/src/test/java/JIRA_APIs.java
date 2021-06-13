@@ -1,5 +1,7 @@
 import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.session.SessionFilter;
+import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -10,25 +12,13 @@ import static io.restassured.RestAssured.given;
 
 public class JIRA_APIs {
 
-//    @BeforeTest
-//    public void loginAPIForJIRA()
-//    {
-//        RestAssured.baseURI = "http://localhost:8080";
-//        SessionFilter sf = new SessionFilter();
-//
-//        given().log().all().header("Content-Type","application/json")
-//                .body("{ \"username\": \"admin\", \"password\": \"admin\" }")
-//                .filter(sf)
-//                .when().post("/rest/auth/1/session")
-//                .then().log().all().assertThat().statusCode(200);
-//
-//    }
+    SessionFilter sf = new SessionFilter();
 
-    @Test
-    public void addCommentToIssue()
+    @BeforeTest
+    public void loginAPIForJIRA()
     {
         RestAssured.baseURI = "http://localhost:8080";
-        SessionFilter sf = new SessionFilter();
+        sf = new SessionFilter();
 
         given().log().all().header("Content-Type","application/json")
                 .body("{ \"username\": \"admin\", \"password\": \"admin\" }")
@@ -36,8 +26,14 @@ public class JIRA_APIs {
                 .when().post("/rest/auth/1/session")
                 .then().log().all().assertThat().statusCode(200);
 
+    }
+
+    @Test
+    public void addCommentToIssue()
+    {
+
         String response =
-                given().log().all().pathParam("id","10003").header("Content-Type","application/json")
+                given().log().all().pathParam("id","10201").header("Content-Type","application/json")
         .body("{\n" +
                 "  \"visibility\": {\n" +
                 "    \"type\": \"role\",\n" +
@@ -59,15 +55,6 @@ public class JIRA_APIs {
     @Test
     public void addAttachmentToIssue()
     {
-        RestAssured.baseURI = "http://localhost:8080";
-        SessionFilter sf = new SessionFilter();
-
-        given().log().all().header("Content-Type","application/json")
-                .body("{ \"username\": \"admin\", \"password\": \"admin\" }")
-                .filter(sf)
-                .when().post("/rest/auth/1/session")
-                .then().log().all().assertThat().statusCode(200);
-
         String response = given().log().all().pathParam("id","10100").header("X-Atlassian-Token","no-check").header("Content-Type","multipart/form-data")
         .filter(sf).multiPart("file",new File("src/main/resources/addPlace.json"))
         .when().post("/rest/api/2/issue/{id}/attachments")
@@ -82,16 +69,7 @@ public class JIRA_APIs {
     @Test
     public void getIssue()
     {
-        RestAssured.baseURI = "http://localhost:8080";
-        SessionFilter sf = new SessionFilter();
-
-        given().relaxedHTTPSValidation().log().all().header("Content-Type","application/json")
-                .body("{ \"username\": \"admin\", \"password\": \"admin\" }")
-                .filter(sf)
-                .when().post("/rest/auth/1/session")
-                .then().log().all().assertThat().statusCode(200);
-
-        String issueDetails = given().log().all().pathParam("id","10100").queryParam("fields","comment")
+        String issueDetails = given().log().all().pathParam("id","10201").queryParam("fields","comment")
                 .filter(sf)
                 .when().get("/rest/api/2/issue/{id}")
                 .then().log().all().assertThat().statusCode(200).extract().response().asString();
@@ -102,14 +80,6 @@ public class JIRA_APIs {
     @Test
     public void createIssue()
     {
-        RestAssured.baseURI = "http://localhost:8080";
-        SessionFilter sf = new SessionFilter();
-
-        given().log().all().header("Content-Type","application/json")
-        .body("{ \"username\": \"admin\", \"password\": \"admin\" }").filter(sf)
-        .when().post("/rest/auth/1/session")
-        .then().log().all().assertThat().statusCode(200);
-
         String issueIDResponse =
                 given().log().all().header("Content-Type","application/json").filter(sf)
                 .body("{\n" +
@@ -118,7 +88,7 @@ public class JIRA_APIs {
                         "     {\n" +
                         "      \"key\": \"SKS\"\n" +
                         "     },\n" +
-                        "      \"summary\": \"Credit Card Defect\",\n" +
+                        "      \"summary\": \"ATM Card Defect\",\n" +
                         "      \"description\": \"Creating issues via Postman\",\n" +
                         "      \"issuetype\": \n" +
                         "      {\n" +
