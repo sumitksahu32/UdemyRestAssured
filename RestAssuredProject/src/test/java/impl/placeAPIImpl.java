@@ -1,5 +1,6 @@
 package impl;
 
+import data.Utils;
 import data.testDataBuild;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -19,35 +20,39 @@ import java.io.*;
 import java.util.*;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.requestSpecification;
 
-public class placeAPIImpl {
+public class placeAPIImpl extends Utils {
 
     RequestSpecification reqS;
     ResponseSpecification respS;
     Response resp;
     testDataBuild tdb=new testDataBuild();
+    String placeID;
+    JsonPath jPath;
+    RequestSpecification req;
 
-    public void addPlacePayload() throws Exception {
-        PrintStream ps = new PrintStream(new FileOutputStream("log.txt"));
-        RequestSpecification req = new RequestSpecBuilder().setBaseUri(getGlobalValue("baseUrl")).addQueryParam("key", "qaclick123")
-                .addFilter(RequestLoggingFilter.logRequestTo(ps))
-                .addFilter(ResponseLoggingFilter.logResponseTo(ps))
-                .setContentType(ContentType.JSON).build();
+    public void addPlacePayload(String name, String lang,String add) throws Exception {
 
-        respS = new ResponseSpecBuilder().expectStatusCode(200).expectContentType(ContentType.JSON).build();
-        reqS = given().spec(req).body(tdb.createPayLoad());
-
+           reqS = given().spec(buildReqSpecification()).body(tdb.createPayLoad(name, lang, add));
     }
 
-    public void addPlaceAPIWithPOST()
+    public void addPlaceAPIWithPOST(String resource,String method) throws Exception
     {
-    resp = reqS.when().post("/maps/api/place/add/json").then().spec(respS).extract().response();
+        if(method.equalsIgnoreCase("POST"))
+        {
+            resp = reqS.when().post(resource).then().spec(buildResSpecification()).extract().response();
+        }
+        else if(method.equalsIgnoreCase("GET"))
+        {
+            resp = reqS.when().get(resource).then().spec(buildResSpecification()).extract().response();
+        }
     }
 
     public void verifyResponse(String ele, String value)
     {
         String respText = resp.asString();
-        JsonPath jPath = new JsonPath(respText);
+        jPath = new JsonPath(respText);
         Assert.assertEquals(jPath.get(ele).toString(),value,"Response did not match");
     }
 
@@ -56,12 +61,19 @@ public class placeAPIImpl {
         Assert.assertEquals(resp.getStatusCode(),200,"Status code did not match");
     }
 
-    public static String getGlobalValue(String key) throws IOException
+    public void getPlaceAPIwithGet(String exParam,String resource) throws Exception
     {
-        Properties prop = new Properties();
-        FileInputStream fis = new FileInputStream("src/test/java/data/global.properties");
-        prop.load(fis);
-        return prop.getProperty(key);
+        placeID = jPath.get("place_id").toString();
+        reqS = given().spec(buildReqSpecification()).queryParam("place_id",placeID);
+        addPlaceAPIWithPOST(resource,"GET");
+        String respText = resp.asString();
+        jPath = new JsonPath(respText);
+        Assert.assertEquals(jPath.get("name").toString(),exParam,"Response did not match");
+    }
+
+    public void deletePlacePayLoad() throws Exception
+    {
+        reqS = given().spec(buildReqSpecification()).body("");
 
     }
 

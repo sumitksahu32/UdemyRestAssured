@@ -1,47 +1,38 @@
-Request method:	POST
-Request URI:	https://rahulshettyacademy.com/maps/api/place/add/json?key=qaclick123
+Request method:	GET
+Request URI:	https://rahulshettyacademy.com/maps/api/place/get/json?key=qaclick123&place_id=649254199793fcd59fb0d48966be5ec6
 Proxy:			<none>
 Request params:	<none>
 Query params:	key=qaclick123
+				place_id=649254199793fcd59fb0d48966be5ec6
 Form params:	<none>
 Path params:	<none>
 Headers:		Accept=*/*
 				Content-Type=application/json
 Cookies:		<none>
 Multiparts:		<none>
-Body:
-{
-    "location": {
-        "lat": 34.3232323,
-        "lng": 43.2343344
-    },
-    "accuracy": 50,
-    "name": "Jamie Lannistor",
-    "phone_number": "8989898989",
-    "address": "18 Park Street, LA",
-    "types": [
-        "shoe park",
-        "shop"
-    ],
-    "website": "",
-    "language": "EN"
-}
+Body:			<none>
 HTTP/1.1 200 OK
-Date: Sun, 13 Jun 2021 14:25:48 GMT
+Date: Mon, 14 Jun 2021 14:57:22 GMT
 Server: Apache/2.4.18 (Ubuntu)
 Access-Control-Allow-Origin: *
 Access-Control-Allow-Methods: POST
 Access-Control-Max-Age: 3600
 Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With
-Content-Length: 194
+Content-Length: 195
 Keep-Alive: timeout=5, max=100
 Connection: Keep-Alive
 Content-Type: application/json;charset=UTF-8
 
 {
-    "status": "OK",
-    "place_id": "2e8004d682ef2218ae295f68fc710b3f",
-    "scope": "APP",
-    "reference": "84a920719fa2baf8e83ddc709738855784a920719fa2baf8e83ddc7097388557",
-    "id": "84a920719fa2baf8e83ddc7097388557"
+    "location": {
+        "latitude": "34.3232323",
+        "longitude": "43.2343344"
+    },
+    "accuracy": "50",
+    "name": "aaaaa",
+    "phone_number": "8989898989",
+    "address": "bbbbbb",
+    "types": "shoe park,shop",
+    "website": "",
+    "language": "EN"
 }

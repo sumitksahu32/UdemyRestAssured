@@ -9,7 +9,7 @@ import java.util.List;
 
 public class testDataBuild {
 
-    public addPlaceGoogleMaps createPayLoad()
+    public addPlaceGoogleMaps createPayLoad(String name,String lang,String add)
     {
         addPlaceGoogleMaps apg = new addPlaceGoogleMaps();
         RestAssured.baseURI = "https://rahulshettyacademy.com/";
@@ -21,9 +21,9 @@ public class testDataBuild {
         lc.setLng(43.2343344);
 
         apg.setAccuracy(50);
-        apg.setAddress("18 Park Street, LA");
-        apg.setLanguage("EN");
-        apg.setName("Jamie Lannistor");
+        apg.setAddress(add);
+        apg.setLanguage(lang);
+        apg.setName(name);
         apg.setLocation(lc);
         apg.setTypes(ls);
         apg.setPhone_number("8989898989");
