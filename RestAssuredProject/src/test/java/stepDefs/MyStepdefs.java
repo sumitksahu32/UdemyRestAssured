@@ -51,4 +51,10 @@ public class MyStepdefs {
         obj.deletePlacePayLoad();
 
     }
+
+    @Given("Add place payload")
+    public void addPlacePayload() throws Exception{
+
+        obj.addPlacePayload();
+    }
 }

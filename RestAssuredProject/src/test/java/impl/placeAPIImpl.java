@@ -28,9 +28,15 @@ public class placeAPIImpl extends Utils {
     ResponseSpecification respS;
     Response resp;
     testDataBuild tdb=new testDataBuild();
-    String placeID;
+    public static String placeID;
     JsonPath jPath;
     RequestSpecification req;
+
+    public void addPlacePayload() throws Exception {
+
+        reqS = given().spec(buildReqSpecification()).body(tdb.addPlace());
+    }
+
 
     public void addPlacePayload(String name, String lang,String add) throws Exception {
 
@@ -42,10 +48,17 @@ public class placeAPIImpl extends Utils {
         if(method.equalsIgnoreCase("POST"))
         {
             resp = reqS.when().post(resource).then().spec(buildResSpecification()).extract().response();
+            String respText = resp.asString();
+            jPath = new JsonPath(respText);
+            placeID = jPath.get("place_id").toString();
         }
         else if(method.equalsIgnoreCase("GET"))
         {
             resp = reqS.when().get(resource).then().spec(buildResSpecification()).extract().response();
+        }
+        else if(method.equalsIgnoreCase("DELETE"))
+        {
+            resp = reqS.when().post(resource).then().spec(buildResSpecification()).extract().response();
         }
     }
 
@@ -54,6 +67,7 @@ public class placeAPIImpl extends Utils {
         String respText = resp.asString();
         jPath = new JsonPath(respText);
         Assert.assertEquals(jPath.get(ele).toString(),value,"Response did not match");
+
     }
 
     public void verifyStatus(String statusCode)
@@ -73,8 +87,7 @@ public class placeAPIImpl extends Utils {
 
     public void deletePlacePayLoad() throws Exception
     {
-        reqS = given().spec(buildReqSpecification()).body("");
-
+        reqS = given().spec(buildReqSpecification()).body(tdb.deleteAPIPayLoad(placeID));
     }
 
 }
