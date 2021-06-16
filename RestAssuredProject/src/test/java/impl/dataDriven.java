@@ -14,7 +14,7 @@ import java.util.Iterator;
 public class dataDriven {
 
     @Test
-    public void doDDT() throws Exception{
+    public ArrayList doDDT() throws Exception{
         FileInputStream fis = new FileInputStream("src/test/java/data/restDataDrivenPOI.xlsx");
         XSSFWorkbook wb = new XSSFWorkbook(fis);
         XSSFSheet sh = wb.getSheetAt(0);
@@ -47,7 +47,7 @@ public class dataDriven {
                     {
                         rw= itRow.next();
 
-                        if(rw.getCell(coloumn).getStringCellValue().equalsIgnoreCase("Purchase"))
+                        if(rw.getCell(coloumn).getStringCellValue().equalsIgnoreCase("RestAssured"))
                         {
                             Iterator<Cell> cAns = rw.cellIterator();
 
@@ -70,6 +70,8 @@ public class dataDriven {
                 }
             }
         System.out.println(arr);
+
+        return arr;
         }
 
     }
